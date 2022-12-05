@@ -1,6 +1,6 @@
 library(tidyverse)
 
-input.raw = read_delim(file="input.txt",  skip_empty_rows = F, delim = "\n", col_names ="x", n_max=8) 
+input.raw = read_delim(file="input05.txt",  skip_empty_rows = F, delim = "\n", col_names ="x", n_max=8) 
 input = input.raw |> 
   mutate(x= str_replace_all(x, pattern = "    ", replacement = " [x] ")) |> 
   mutate(x = str_replace_all(x, pattern = " ", replacement="")) |> 
@@ -17,7 +17,7 @@ input = input.raw |>
   deframe() |> 
   print()
   
-instructions.raw = read_delim(file="input.txt",  skip_empty_rows = F, delim = "\n", col_names ="x", skip = 10) 
+instructions.raw = read_delim(file="input05.txt",  skip_empty_rows = F, delim = "\n", col_names ="x", skip = 10) 
 instructions = instructions.raw |> 
   mutate(step = row_number()) |> 
   separate(col = "x", into = c("t1", "anzahl", "t2","von", "t3","nach"), convert = T) |>
