@@ -3,7 +3,7 @@ library(janitor)
 
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
-input.raw = read_delim(file="input06.txt",  skip_empty_rows = F, delim = "\n", col_names ="x", n_max=8) 
+input.raw = read_delim(file="input06.txt",  skip_empty_rows = F, delim = "\n", col_names ="x") 
 
 
 
@@ -41,7 +41,7 @@ position(input.raw, 14)
 
 
 
-#teil 1 ursprünglich
+#teil 1 ursprÃ¼nglich
 input.raw |> 
   mutate(a= map(.x=x, ~str_split(.x,""))) |> 
   unnest(a) |> 
