@@ -10,38 +10,33 @@ input.raw = read_delim(file="input06.txt",  skip_empty_rows = F, delim = "\n", c
 #allgemein (nach teil 2)
 
 
-position = function(df, anzahl){
+position = function(dff, anzahl){
 
-result = df |> 
-  mutate(a= map(.x=x, ~str_split(.x,""))) |> 
-  unnest(a) |> 
-  unnest_longer(a) |> 
-  mutate(y= str_sub(string = x, start=row_number(), end = row_number()+anzahl-1)) |> 
+result = 1:(nchar(dff)-anzahl+1) |>
+  as_tibble() |>
+  select(nummer = 1) |> 
+  mutate(y= str_sub(string = dff, start=row_number(), end = row_number()+anzahl-1)) |> 
   filter(nchar(y)==anzahl) |> 
   mutate(nummer = row_number()+anzahl-1) |> 
   mutate(a = map(.x=y, ~str_split(.x,""))) |> 
   unnest(a) |> 
   mutate(d= map(.x=a, ~duplicated(.x))) |> 
   mutate(dd = map(.x= d, ~!any(.x))) |> 
-  select(-a,-d) |> 
   unnest(dd) |> 
   filter(dd==TRUE) |> 
   head(1) |> 
   select(nummer) |> 
-  deframe()
+  deframe() 
 
   return(result)
 }
 
-position(input.raw, 4)
-position(input.raw, 14)
+position(input.raw |> deframe(), 4)
+position(input.raw |> deframe(), 14)
 
 
 
-
-
-
-#teil 1 ursprÃ¼nglich
+#teil 1 ursprünglich
 input.raw |> 
   mutate(a= map(.x=x, ~str_split(.x,""))) |> 
   unnest(a) |> 
@@ -57,25 +52,3 @@ input.raw |>
   select(z) |> 
   deframe()
   
-#teil 2 und allgemein teil1
-input.raw |> 
-  mutate(a= map(.x=x, ~str_split(.x,""))) |> 
-  unnest(a) |> 
-  unnest_longer(a) |> 
-  mutate(y= str_sub(string = x, start=row_number(), end = row_number()+13)) |> 
-  filter(nchar(y)==14) |> 
-  mutate(nummer = row_number()+13) |> 
-  mutate(a = map(.x=y, ~str_split(.x,""))) |> 
-  unnest(a) |> 
-  mutate(d= map(.x=a, ~duplicated(.x))) |> 
-  mutate(dd = map(.x= d, ~!any(.x))) |> 
-  select(-a,-d) |> 
-  unnest(dd) |> 
-  filter(dd==TRUE) |> 
-  head(1) |> 
-  select(nummer) |> 
-  deframe()
-  
-
-
-
