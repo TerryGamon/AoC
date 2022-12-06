@@ -22,7 +22,6 @@ result = 1:(nchar(dff)-anzahl+1) |>
   unnest(a) |> 
   mutate(d= map(.x=a, ~duplicated(.x))) |> 
   mutate(dd = map(.x= d, ~!any(.x))) |> 
-  unnest(dd) |> 
   filter(dd==TRUE) |> 
   head(1) |> 
   select(nummer) |> 
@@ -36,7 +35,7 @@ position(input.raw |> deframe(), 14)
 
 
 
-#teil 1 ursprünglich
+#teil 1 ursprÃ¼nglich
 input.raw |> 
   mutate(a= map(.x=x, ~str_split(.x,""))) |> 
   unnest(a) |> 
