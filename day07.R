@@ -1,10 +1,7 @@
 library(tidyverse)
-
-wd <- dirname(rstudioapi::getSourceEditorContext()$path)
-setwd(wd)
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
 input.raw = read_delim(file="input07.txt", delim="\n", col_names = c("x")) 
-
 ergebnis =
   input.raw |> 
   mutate(pfad=" ") |> 
@@ -16,8 +13,6 @@ ergebnis =
 
 pfad = "root"
 for (i in 1:nrow(ergebnis)){
-#for (i in 1:45){
-  cat(i, "\n")
   up = FALSE
   zeile = ergebnis$x[i]
   if (grepl("cd \\.\\.", zeile)){
@@ -28,9 +23,7 @@ for (i in 1:nrow(ergebnis)){
       pfad = paste0(pfad, "/", gsub(pattern = "cd ", x= zeile, replacement = ""))
   }
   ergebnis$pfad[i] = pfad
-  cat(pfad,"\n")
 }
-
 
 splitten = function(i){
   l = length(unlist(strsplit(i, '/')))
@@ -43,11 +36,9 @@ splitten = function(i){
   return(e)
 }
 
-
 struktur = ergebnis |> 
   filter(!str_detect(x,"cd ") | !is.na(size)) |> 
-  filter(!str_detect(x,"dir ") | !is.na(size)) |> 
-  print()
+  filter(!str_detect(x,"dir ") | !is.na(size))
 
 zusammenfassung = 
   struktur |> 
