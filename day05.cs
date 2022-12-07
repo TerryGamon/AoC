@@ -9,40 +9,43 @@ namespace Adventofcode.Tag._5
 {
     class Program
     {
-        /*
-            [V]     [B]                     [C]
-            [C]     [N] [G]         [W]     [P]
-            [W]     [C] [Q] [S]     [C]     [M]
-            [L]     [W] [B] [Z]     [F] [S] [V]
-            [R]     [G] [H] [F] [P] [V] [M] [T]
-            [M] [L] [R] [D] [L] [N] [P] [D] [W]
-            [F] [Q] [S] [C] [G] [G] [Z] [P] [N]
-            [Q] [D] [P] [L] [V] [D] [D] [C] [Z]
-             1   2   3   4   5   6   7   8   9 
-        */
-
-        static List<string> stacks = new List<string> {
-                "QFMRLWCV",
-                "DQL",
-                "PSRGWCNB",
-                "LCDHBQG",
-                "VGLFZS",
-                "DGNP",
-                "DZPVFCW",
-                "CPDMS",
-                "ZNWTVMPC"
-            };
+        static List<string> stacks;
 
         static void Main(string[] args)
         {
-            var input = File.ReadAllText("../../input.txt").Split('\n');
-            
-            foreach(var line in input)
-                Move(line, true);
+            var input = File.ReadAllText("../../input_org.txt").Split('\n');
+            stacks = BuildStacks(input);
+
+            foreach(var line in input.Where(l => l.Contains("move")))
+                Move(line, false);
 
             foreach (var stack in stacks)
                 Console.Write(string.Join("", stack.Last())); //VWLCWGSDQ bzw. TCGLQSLPW
             Console.WriteLine();
+        }
+
+        private static List<string> BuildStacks(string[] input)
+        {
+            var start = Array.FindIndex(input, line => line.StartsWith(" 1"));
+            var nrOfStacks = Convert.ToInt32(input[start].Trim().Last().ToString());
+            var stacks = input.Take(start).ToArray();
+            var stackBuilder = new List<string>();
+
+            for (int i = 0; i < nrOfStacks; i++)
+                stackBuilder.Add(string.Empty);
+
+            foreach (var line in stacks)
+            {
+                var count = 0;
+                for (int i = 1; i <= line.Length; i += 4)
+                {
+                    var crate = line.ElementAt(i).ToString();
+                    if (!string.IsNullOrWhiteSpace(crate))
+                        stackBuilder[count]  = crate + stackBuilder[count];
+                    count++;
+                }
+            }
+            return stackBuilder;
         }
 
         private static void Move(string line, bool isMover9001)
